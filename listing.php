@@ -107,11 +107,10 @@
 				var theAction = "A"; // add rating
 			}
 			changeRating(theRating, theAction);
-			var funct = "rate";
 			$.ajax({
 				url: "listingfunctions.php",
 				type: "POST",
-				data: { functt : funct, username : user, rating : theRating, listid : lid, action : theAction }
+				data: { f : "rate", username : user, rating : theRating, listid : lid, action : theAction }
 			});
 			
 		});
@@ -145,11 +144,10 @@
 		var confirmBox = confirm("Are you sure you want to delete this space?");
 		if (confirmBox == true) { // The user confirmed.
 			var lid = '<?php echo "$id"; ?>';
-			var funct = "delete";	
 			$.ajax({
 				url: "listingfunctions.php",
 				type: "POST",
-				data: { f : funct, listid : lid }
+				data: { f : "delete", listid : lid }
 			});
 			// Redirect to the index page on deletion.
 			window.location = "http://ec2-52-11-184-213.us-west-2.compute.amazonaws.com";

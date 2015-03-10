@@ -3,7 +3,6 @@ $(document).ready(function() {
 		e.preventDefault();
 		$("#wrapper").toggleClass("toggled");
 	});
-
 });
 
 /* Toggles the class of the rating button with the given id and disables the 

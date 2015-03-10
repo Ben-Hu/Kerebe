@@ -9,7 +9,6 @@
 
 <!-- JQuery -->
 <script src="js/jquery.js"></script>
-
 	
 <!-- Bootstrap Core Javascript -->
 <script src="js/bootstrap.min.js"></script>
@@ -18,8 +17,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
 
 <!-- Custom JQuery or Javascript functions -->
-<script src="js/functions.js"></script>    
-
+<script src="js/functions.js"></script>
+    
 <style>
 	body {
 		padding-top: 51px;
