@@ -117,13 +117,13 @@
 			<div class="modal-body">
 				<form method="post">
 					<div>
-						<input type="text" class="form-control" name="username" maxlength="25" placeholder="Username">
+						<input type="text" class="form-control" name="username" maxlength="25" placeholder="Username" required>
 						<br />
-						<input type="password" class="form-control" name="password" maxlength="25" placeholder="Password">
+						<input type="password" class="form-control" name="password" maxlength="25" placeholder="Password" required>
 						<br />
-						<input type="text" class="form-control" name="firstname" maxlength="20" placeholder="First name">
+						<input type="text" class="form-control" name="firstname" maxlength="20" placeholder="First name" required>
 						<br />
-						<input type="text" class="form-control" name="lastname" maxlength="20" placeholder="Last name">
+						<input type="text" class="form-control" name="lastname" maxlength="20" placeholder="Last name" required>
 						<br />
 						<button class="btn btn-primary" name="register" value="register" type="submit">Register</button>
 					</div>

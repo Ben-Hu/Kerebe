@@ -36,6 +36,7 @@
 		querydb("DELETE FROM postrated WHERE listid = $listid");
 		querydb("DELETE FROM posted WHERE listid = $listid");
 		querydb("DELETE FROM tenant WHERE listid = $listid");
+		querydb("DELETE FROM listinterests WHERE listid = $listid");
 		querydb("DELETE FROM listings WHERE listid = $listid");
 	} 
 ?>

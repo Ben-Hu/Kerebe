@@ -1,28 +1,5 @@
-<?php
+<?php 
 	session_start();
-
-	// If the "post a new listing" form is submitted
-	if (isset($_POST['post'])) {
-		$user = $_SESSION['username'];
-		
-		// Get the information entered in the form.
-		$addr = $_POST['address'];
-		$city = $_POST['city'];
-		$description = $_POST['description'];
-		$insertListing = "INSERT INTO listings (address, city, description) VALUES ('$addr', '$city', '$description')";
-		
-		querydb($insertListing);
-		
-		// Get the id of the new listing.
-		$retrieveID = "SELECT listid FROM listings WHERE address='$addr' AND city='$city'";
-		$getid = querydb($retrieveID);
-		$id = pg_fetch_row($getid);
-
-		// Insert the owner into posted and add the owner as a tenant.
-		querydb("INSERT INTO posted VALUES ($id[0], '$user')");
-		querydb("INSERT INTO tenant VALUES ($id[0], '$user')");
-		header("Location: http://ec2-52-11-184-213.us-west-2.compute.amazonaws.com/listing.php?id=$id[0]"); 
-	}
 ?>
 
 <div id="sidebar-wrapper">
@@ -40,13 +17,15 @@
 						<li>
 							<a href='#' onclick='toggleVisibility()'>Post</a>
 							<div id='listing-form' style='display:none'>
-								<form method='post'>
+								<form method='post' action='postdatabase.php'>
 									<div>
-										<input type='text' class='form-control' maxlength='25' name='address' placeholder='Address'>
+										<input type='text' class='form-control' maxlength='25' name='address' placeholder='Address' required>
 									<br />
-										<input type='text' class='form-control' maxlength='25' name='city' placeholder='City'>
+										<input type='text' class='form-control' maxlength='25' name='city' placeholder='City' required>
 									<br />
-										<input type='text' class='form-control' maxlength='10240' name='description' placeholder='Description'>
+										<input type='text' class='form-control' maxlength='10240' name='description' placeholder='Description' required>
+									<br />
+										<input type='text' class='form-control' data-role='tagsinput' name='interests' placeholder='Comma-separated interests' required> 
 									<br />
 										<button type='submit' class='btn btn-default' name='post'>Post</button>
 									</div>
@@ -62,7 +41,7 @@
 </div>
 
 <!-- Toggle the visibility of the form to post listings. -->
-<script>
+<script async>
 	function toggleVisibility() {
 		$("#listing-form").toggle();
 	}
