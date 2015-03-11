@@ -9,4 +9,5 @@
 		pg_close($dbconn);
 		return $result;
 	}
+	
 ?>

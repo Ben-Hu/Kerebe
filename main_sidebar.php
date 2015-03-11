@@ -30,7 +30,7 @@
 		<?php
 			// If the user is logged in
 			if (isset($_SESSION['username'])) {
-				$getListing = "SELECT p.listid, address FROM posted p JOIN listings l ON p.listid = l.listid WHERE username='$curruser'"; 
+				$getListing = "SELECT p.listid, address FROM posted p JOIN listings l ON p.listid = l.listid WHERE username='$user'"; 
 				$result = querydb($getListing);
 				// Display the listing owned by the logged in user.
 				while ($row = pg_fetch_row($result)) {

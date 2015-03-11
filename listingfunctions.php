@@ -2,6 +2,7 @@
 	include "database.php";
 
 	$func = $_POST['f']; // Check what function to apply
+	$listid = $_POST['listid'];
 	
 	/* Returns the correct query to update the rating given a rating $r, an
 	 * action ("A(dd)" or "D(elete)"), and the list ID $lid. */
@@ -17,7 +18,6 @@
 	if ($func == "rate") {
 		$user = $_POST['username'];
 		$rating = $_POST['rating'];
-		$listid = $_POST['listid'];
 		$action = $_POST['action'];
 		$modifyRating = updateRating($rating, $action, $listid);
 		
@@ -30,16 +30,12 @@
 		}
 		querydb($modifyRating);
 	}
-	
+
 	/* Delete a listing. */
 	if ($func == "delete") {
-		$listid = $_POST['listid'];
 		querydb("DELETE FROM postrated WHERE listid = $listid");
 		querydb("DELETE FROM posted WHERE listid = $listid");
 		querydb("DELETE FROM tenant WHERE listid = $listid");
 		querydb("DELETE FROM listings WHERE listid = $listid");
 	} 
-
-	echo "$func";
-
 ?>

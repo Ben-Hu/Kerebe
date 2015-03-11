@@ -117,26 +117,23 @@
 	</script>
 
 	<script>
+		var lid = <?php echo "$id"; ?>;
 		$("#edit-listing").click(function() {
 			$(".edit").each(function(i) {
 				// Replace the listing information fields with input fields
 				// for users to modify if needed.
 				$(this).replaceWith("<input class='form-control' type='text' name='" + 
-									$(this).attr("name")  + 
-									"' value='" + $(this).text() + "' />");
+							$(this).attr("name")  + 
+							"' value='" + $(this).text() + "' />");
 			});
 			// Replace the "Edit" button with a "Save" button to save any changes
 			// made when editing a listing.
 			$(this).replaceWith("<button type='submit' class='btn btn-success' name='save' id='save'>Save</button>");
 	
 			// Replace the delete button with a "Cancel" button to cancel editing.
-			$("#delete").replaceWith("<a class='btn btn-danger' id='cancel'>Cancel</a>");
+			$("#delete").replaceWith("<button class='btn btn-danger'>Cancel</button>");
 		});
-
-		// Remove the input fields by reloading the page.
-		$("#cancel").click(function() {
-			location.reload();
-		});
+		
 	</script>
 
 	<script>
