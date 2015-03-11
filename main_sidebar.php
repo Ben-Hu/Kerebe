@@ -42,11 +42,11 @@
 							<div id='listing-form' style='display:none'>
 								<form method='post'>
 									<div>
-										<input type='text' class='form-control' name='address' placeholder='Address'>
+										<input type='text' class='form-control' maxlength='25' name='address' placeholder='Address'>
 									<br />
-										<input type='text' class='form-control' name='city' placeholder='City'>
+										<input type='text' class='form-control' maxlength='25' name='city' placeholder='City'>
 									<br />
-										<input type='text' class='form-control' name='description' placeholder='Description'>
+										<input type='text' class='form-control' maxlength='10240' name='description' placeholder='Description'>
 									<br />
 										<button type='submit' class='btn btn-default' name='post'>Post</button>
 									</div>
