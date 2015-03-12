@@ -7,11 +7,12 @@
 		include_once "top_navi.php";
 	}
 	
+	//update account information
 	if (isset($_POST['save'])) {
 		$conn = "host=csc309instance2.cuw3cz9voftq.us-west-2.rds.amazonaws.com port=5432 dbname=SynergySpace user=CSC309Project password=309kerebe";
 		$dbconn = pg_connect($conn);
 		$oldpw = $_POST['oldpw'];
-		$newpw = $_POST['newpw'];
+        $newpw = $_POST['newpw'];
 		$pdesc = $_POST['profiledesc'];
 		$user = $_SESSION['username'];
 		
@@ -23,7 +24,9 @@
 		    echo "<script type='text/javascript'>alert('Incorrect old password. '$oldpw'')</script>";
 		    
 		} else {
-		    $result = pg_query($dbconn, "UPDATE users SET password = '$newpw' where username = '$user'");
+            if (isset($newpw)){
+                $result = pg_query($dbconn, "UPDATE users SET password = '$newpw' where username = '$user'");
+            }
 		    $result2 = pg_query($dbconn, "UPDATE users SET profile = '$pdesc' where username = '$user'");
 		    pg_close($dbconn);
 
@@ -32,6 +35,23 @@
 		    // Set session variables to input in the profile page
 		    $_SESSION["username"] = "$user";
 		    header("Location: http://ec2-52-10-253-249.us-west-2.compute.amazonaws.com/profile.php");
+		}
+	}
+
+	//update interests
+	if (isset($_POST['update'])) {
+		$conn = "host=csc309instance2.cuw3cz9voftq.us-west-2.rds.amazonaws.com port=5432 dbname=SynergySpace user=CSC309Project password=309kerebe";
+		$dbconn = pg_connect($conn);
+		$user = $_SESSION['username'];
+
+		if(isset($_POST["newInterest"])){
+    
+   			$capture_field_vals ="";
+  			foreach($_POST["newInterest"] as $key => $text_field){
+       				$capture_field_vals .= $text_field .", ";
+				$insert_row = pg_query($dbconn, "INSERT INTO interests (username, interest) VALUES ('$user', '$text_field')");
+   			}
+   			//echo "<p> $capture_field_vals </p>";
 		}
 	}
 ?>
@@ -70,20 +90,21 @@
     <!-- Sidebar -->
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
-		<li><FONT COLOR="FFFFFF">INTERESTS(?)</FONT></li>
+		<li><FONT COLOR="FFFFFF">Placeholders</FONT></li>
+		
 		<?php
-		$curruser = $_SESSION['username'];
+		/* $curruser = $_SESSION['username'];
 		$conn = "host=csc309instance2.cuw3cz9voftq.us-west-2.rds.amazonaws.com port=5432 dbname=SynergySpace user=CSC309Project password=309kerebe";
 		$dbconn = pg_connect($conn);
 		$query = "SELECT interest FROM interests WHERE username='$curruser'";
 		$result = pg_query($dbconn, $query);
-
+        
 		while ($row = pg_fetch_row($result)) {
 			echo "<li>
                 	<div id='interests'>
                		 <form method='post'>
                 	    <div>
-                       		 <input type='text' class='form-control' name='someinterest' value='$row[0]'>
+                       		 <input type='text' class='form-control' name='someotherinterest' value='$row[0]'>
                            </div>
                 </form>
                 </div> 
@@ -91,8 +112,9 @@
 	
 		}
 		
-		pg_close($dbconn);
+		pg_close($dbconn); */
 		?>
+		
 			
         </ul>
     </div>
@@ -114,23 +136,25 @@
                 <form method="post">
                     <div>
 			
-                        <input type="text" class="form-control" name="oldpw" placeholder="Old Password">
+                        <input type="password" class="form-control" name="oldpw" placeholder="Old Password">
                         <br />
 
-                        <input type="text" class="form-control" name="newpw" placeholder="New Password">
+                        <input type="password" class="form-control" name="newpw" placeholder="New Password">
                         <br />
 
-			<input type="text" class="form-control" name="profiledesc" value="<?php $user = $_SESSION['username'];
+			<textarea class="form-control" rows="5" name="profiledesc"><?php $user = $_SESSION['username'];
 					$conn = "host=csc309instance2.cuw3cz9voftq.us-west-2.rds.amazonaws.com port=5432 dbname=SynergySpace user=CSC309Project password=309kerebe";
 					$dbconn = pg_connect($conn);
 					$query = "SELECT profile FROM users WHERE username='$user'";
 					$getdesc = pg_query($dbconn, $query);
 					$result = pg_fetch_result($getdesc, 0, 0);
 					if (!$result) {
-						echo"No Result";
+						echo "No Result";
 					}
-					echo "$result"; ?> ">
-                        <br />
+					echo "$result"; ?></textarea>
+
+                    
+                    <br/>
 
 			<input type="text" class="form-control" name="newLName" value="<?php $user = $_SESSION['username'];
 					$conn = "host=csc309instance2.cuw3cz9voftq.us-west-2.rds.amazonaws.com port=5432 dbname=SynergySpace user=CSC309Project password=309kerebe";
@@ -156,7 +180,7 @@
 					echo "$result"; ?> ">
                         <br />			
 
-                        <button class="btn btn-primary" name="save" value="save" type="submit">Save</button>
+                    <button class="btn btn-primary" name="save" value="save" type="submit">Save</button>
 
                     </div>
                 </form>
@@ -172,9 +196,9 @@
             </div>
 		
 	<!-- user info setting form -->
-              	<div id="listing-form">
-                <form method="post">
-                    <div>
+    <div id="listing-form">
+        <form method="post">
+            <div>
 			<?php
 				$curruser = $_SESSION['username'];
 				$conn = "host=csc309instance2.cuw3cz9voftq.us-west-2.rds.amazonaws.com port=5432 dbname=SynergySpace user=CSC309Project password=309kerebe";
@@ -183,26 +207,24 @@
 				$result = pg_query($dbconn, $query);
 
 				while ($row = pg_fetch_row($result)) {
-					echo "<input type='text' class='form-control' name='someinterest' value='$row[0]'>
-					</br>";
-	
+					echo "<div><input type='text' name='existingInterest[]' value='$row[0]'/><button class='remove_exint'> <span class='glyphicon glyphicon-remove'></span></button>
+					</br></br></div>";       
 				}
 		
 				pg_close($dbconn);
 			?>
 
 			<div class="input_fields_wrap">
-   			<button class="add_field_button">Add Interest</button>
+                <button class="add_field_button"><span class="glyphicon glyphicon-plus"></span></button>
     			</br>
-			</br>
+			    </br>
 			</div>
-			</br>
-			</br>		
-
-			<button class="btn btn-primary" name="update" value="Update" type="submit">Update Interests</button>
-	           </div>
-                </form>
-                </div>
+			    </br>
+			    </br>		
+			 <button class="btn btn-primary" name="update" value="update" type="submit">Update Interests</button>
+	       </div>
+        </form>
+    </div>
 
 
         <hr>
@@ -260,16 +282,29 @@
         e.preventDefault();
         if(x < max_fields){ //max input box allowed
             x++; //text box increment
-            $(this).parent('div').remove();
-            $(wrapper).append('<div><input type="text" class="form-control" name="mytext[]"/><a href="#" class="remove_field">Remove</a></br></br></div>'); //add input box
-        }
+            $(wrapper).append('<div><input type="text" name="newInterest[]"/><button class="remove_field" name="Remove Interest" type="button"> <span class="glyphicon glyphicon-remove"></span> </button></br></br></div>'); //add input box
+        }   
 
     });
     
     $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
         e.preventDefault(); $(this).parent('div').remove(); x--;
     })
+    
+    $(wrapper).on("click",".remove_exint", function(e){ //user click on remove text
+        <?php
+				$curruser = $_SESSION['username'];
+				$conn = "host=csc309instance2.cuw3cz9voftq.us-west-2.rds.amazonaws.com port=5432 dbname=SynergySpace user=CSC309Project password=309kerebe";
+				$dbconn = pg_connect($conn);
+                //$interest_var = key($_POST["newInterest"]);
+                $interest_var = "Test";
+				$query = "DELETE FROM interests WHERE interest='$interest_varss' AND username='$curruser'";
+                //todo : fetch the interest var from the parent 
+				$result = pg_query($dbconn, $query);
+        ?>
+    })
 });
+        console.log("<?php echo "$interest_var"; ?>");
 </script>
    
 </body>
