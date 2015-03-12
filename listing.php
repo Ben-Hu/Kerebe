@@ -94,87 +94,17 @@
 							</div>
 						</div>
 					</footer>
-				</form>
-				
+				</form>	
 			</div> <!-- /.col-md-9 -->
 		</div> <!-- /.row -->
 	</div> <!-- /.container -->
 
-	<script async>
-		var user = <?php echo json_encode("$user"); ?>;
-		var ifLiked = <?php echo "$liked"; ?>;
-		if (ifLiked != 0) { // if the user has rated this listing
-			// Get the value of their rating.
-			var likedVal = <?php echo json_encode("$likedResult[0]"); ?>;
-			toggleRating(likedVal);
-		} 
-				
-		$(".likedislike").click(function(e) {
-			e.preventDefault();
-			var lid = '<?php echo "$id"; ?>';
-			var theRating = $(this).attr("id");
-			var other = 1 - theRating;
- 			toggleRating(theRating);
-			
-			// Get the currentClass after toggling the rating button
-			var currentClass = $(this).attr("class");
-			
-			// If the button was disabled
-			if (currentClass == "btn btn-default likedislike") { 
-				var theAction = "D"; // delete rating
-			} else { // Something was rated
-				var theAction = "A"; // add rating
-			}
-			changeRating(theRating, theAction);
-			$.ajax({
-				url: "listingfunctions.php",
-				type: "POST",
-				data: { f : "rate", username : user, rating : theRating, listid : lid, action : theAction }
-			});
-			
-		});
-	</script>
-
 	<script>
+		var user = <?php echo json_encode($user); ?>;
 		var lid = <?php echo "$id"; ?>;
-		$("#edit-listing").click(function() {
-			$(".edit").each(function(i) {
-				// Replace the listing information fields with input fields
-				// for users to modify if needed.
-				$(this).replaceWith("<input class='form-control' type='text' name='" + 
-							$(this).attr("name")  + 
-							"' value='" + $(this).text() + "' required />");
-			});
-			// Replace the "Edit" button with a "Save" button to save any changes
-			// made when editing a listing.
-			$(this).replaceWith("<button type='submit' class='btn btn-success' name='save' id='save'>Save</button>");
-	
-			// Replace the delete button with a "Cancel" button to cancel editing.
-			$("#delete").replaceWith("<button class='btn btn-danger'>Cancel</button>");
-			
-			// Replace the interest list with an editable tag list
-			$(".tag").remove();
-			$("#interests").attr("type", "text");
-			$("#interests").attr("data-role", "tagsinput");
-			$("#interests").tagsinput("refresh");
-		});
-		
+		var ifLiked = <?php echo "$liked"; ?>;
+		var likedVal = <?php echo json_encode($likedResult[0]); ?>;
 	</script>
-
-	<script>
-	$("#delete").click(function() {
-		var confirmBox = confirm("Are you sure you want to delete this space?");
-		if (confirmBox == true) { // The user confirmed.
-			var lid = '<?php echo "$id"; ?>';
-			$.ajax({
-				url: "listingfunctions.php",
-				type: "POST",
-				data: { f : "delete", listid : lid }
-			});
-			// Redirect to the index page on deletion.
-			window.location = "http://ec2-52-11-184-213.us-west-2.compute.amazonaws.com";
-		}
-	}); 
-	</script>	
+	<script src="js/listing.js"></script>
 </body>
 </html>
