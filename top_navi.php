@@ -52,7 +52,7 @@
 			</button>
 			
 			<!-- Button to open and close sidebar. -->
-			<a class="navbar-brand" href="#menu-toggle" id="menu-toggle">&#60;</a>
+			<a class="navbar-brand" href="#menu-toggle" id="menu-toggle"><span class="glyphicon glyphicon-th-list"></span></a>
 		</div>
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
