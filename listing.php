@@ -49,10 +49,10 @@
 						<div class="ratings">
 							<p class="pull-right">
 								<button class="btn btn-default likedislike" id="1">
-									<span class="glyphicon glyphicon-plus"></span>
+									<span class="glyphicon glyphicon-thumbs-up"></span>
 								</button>
 								<button class="btn btn-default likedislike" id="0">
-									<span class="glyphicon glyphicon-minus"></span>
+									<span class="glyphicon glyphicon-thumbs-down"></span>
 								</button>
 							</p>
 						
@@ -75,6 +75,25 @@
                         <p class="edit" name="description"><?php echo "$info[4]"; ?></p>
 						
 					</div>
+				
+					<!-- Skills/Interest tags -->
+					<footer>
+						<div class="row">
+							<div class="col-lg-12">
+								<?php
+									$allTags = "";
+									while ($tag = pg_fetch_row($tags)) {
+										$allTags = $allTags . "," . $tag[0]; 
+										echo "
+											<button class='btn btn-info btn-xs tag' disabled>$tag[0]</button>
+										";
+									}
+									$newAllTags = ltrim($allTags, ',');
+								?>
+								<input id="interests" type="hidden" class="form-control" value="<?php echo "$newAllTags"; ?>" name="interests" hidden="true" required>
+							</div>
+						</div>
+					</footer>
 				</form>
 				
 			</div> <!-- /.col-md-9 -->
@@ -124,7 +143,7 @@
 				// for users to modify if needed.
 				$(this).replaceWith("<input class='form-control' type='text' name='" + 
 							$(this).attr("name")  + 
-							"' value='" + $(this).text() + "' />");
+							"' value='" + $(this).text() + "' required />");
 			});
 			// Replace the "Edit" button with a "Save" button to save any changes
 			// made when editing a listing.
@@ -132,6 +151,12 @@
 	
 			// Replace the delete button with a "Cancel" button to cancel editing.
 			$("#delete").replaceWith("<button class='btn btn-danger'>Cancel</button>");
+			
+			// Replace the interest list with an editable tag list
+			$(".tag").remove();
+			$("#interests").attr("type", "text");
+			$("#interests").attr("data-role", "tagsinput");
+			$("#interests").tagsinput("refresh");
 		});
 		
 	</script>

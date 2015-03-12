@@ -8,6 +8,9 @@
 	$id = $_GET['id'];
 	$getInfo = querydb("SELECT * from listings WHERE listid = $id");
 	$info = pg_fetch_row($getInfo);
+	
+	// Get skills/interest tags for the current listing
+	$tags = querydb("SELECT interest FROM listinterests WHERE listid = $id");
 
 	// Get the tenants for the current database
 	$allTenants = querydb("SELECT username FROM tenant WHERE listid = $id");
@@ -26,8 +29,20 @@
 		$addr = $_POST['address'];
 		$city = $_POST['city'];
 		$desc = $_POST['description'];
+		$interestString = $_POST['interests'];
+		// Get the array of interests
+		$interests = explode(",", $interestString);
 			
 		querydb("UPDATE listings SET address = '$addr', city = '$city', description = '$desc' WHERE listid = $id");
+		querydb("DELETE FROM listings WHERE listid = $id");
+		
+		// Update the list of interests
+		querydb("DELETE FROM listinterests WHERE listid = $id");
+		foreach ($interests as &$interest) {
+			querydb("INSERT INTO listinterests VALUES($id, '$interest')");
+		}
+		$tags = querydb("SELECT interest FROM listinterests WHERE listid = $id");
+		
 		// Query the database again to get the updated listing information
 		$getInfo = querydb("SELECT * from listings WHERE listid = $id");
 		$info = pg_fetch_row($getInfo);
